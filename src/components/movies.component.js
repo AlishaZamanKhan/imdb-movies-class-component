@@ -9,38 +9,64 @@ import Rating from "./common/rating.component";
 // import Filtering from "./common/filtering.component";
 
 class Movies extends Component {
-	state = {
-		movies: []
-	};
+  state = {
+    movies: [],
+  };
 
-	componentDidMount(){
-		const movies = getMovies();
-		this.setState({ movies });
-	}
+  componentDidMount() {
+    const movies = getMovies();
+    this.setState({ movies });
+  }
 
-	handleToggleRating = movieRank => {
-		const movies = [...this.state.movies];
-		const movie = movies.find(movie => movie.rank === movieRank);
-		movie.user_rating = !(movie.user_rating);
-		this.setState({ movies });
-	}
+  handleToggleRating = (movieRank) => {
+    const movies = [...this.state.movies];
+    const movie = movies.find((movie) => movie.id === movieRank);
+    movie.user_rating = !movie.user_rating;
+    this.setState({ movies });
+  };
 
-	render() {
-	const columns = [
-		{ label: 'Rank', path:'rank', content: (movie, key) => <td> {movie[key]}</td>},
-		{ label: 'Title', path:'title', content:(movie, key) => <td> {movie[key]}</td>},
-		{ label: 'IMDB_rating', path:'imdb_rating', content: (movie, key) => <td> {movie[key]}</td>},
-		{ label: 'User_rating', path:'user_rating', content:(movie, key)=> <td><Rating isRated= {movie[key]} rank={ movie.rank } handleToggleRating={this.handleToggleRating}/></td>}
-	]
+  render() {
+    const columns = [
+      {
+        label: "Rank",
+        path: "id",
+        content: (movie, key) => <td> {movie[key]}</td>,
+      },
+      {
+        label: "Title",
+        path: "title",
+        content: (movie, key) => <td> {movie[key]}</td>,
+      },
+      {
+        label: "Poster",
+        path: "posterUrl",
+        content: (movie, key) => (
+          <td>
+            <img src={movie[key]}  style={{ height:'100px', width: 'auto' }} />
+          </td>
+        ),
+      },
+      {
+        label: "User_rating",
+        path: "user_rating",
+        content: (movie, key) => (
+          <td>
+            <Rating
+              isRated={movie[key]}
+              rank={movie.id}
+              handleToggleRating={this.handleToggleRating}
+            />
+          </td>
+        ),
+      },
+    ];
 
-	return (
-		<>
-		<Table	data =  {this.state.movies}
-				columns ={columns} 
-		/>
-		</>
-	);
-	}
+    return (
+      <>
+        <Table data={this.state.movies} columns={columns} />
+      </>
+    );
+  }
 }
 
 export default Movies;
